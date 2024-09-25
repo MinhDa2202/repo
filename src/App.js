@@ -38,7 +38,7 @@ function App() {
           </div>
           <div className='col-lg-12 mb-5'>
             <div className='row'>
-              <div id="carouselExampleCaptions" className="carousel slide">
+              <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                 <div className="carousel-indicators">
                   <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
                   <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -48,7 +48,7 @@ function App() {
                   <div className="carousel-item active">
                     <img src="./Images/pizza1.jpg" className="d-block w-100" alt="..." />
                     <div className="carousel-caption d-none d-md-block">
-                      <h5>Neapolitan Pizza </h5>
+                      <h5>Neapolitan Pizza</h5>
                     </div>
                   </div>
                   <div className="carousel-item">
@@ -75,6 +75,7 @@ function App() {
               </div>
             </div>
           </div>
+
 
           <div className='col-lg-12 mb-5'>
             <div className='container'>
@@ -144,10 +145,10 @@ function App() {
                 </div>
                 <div className='row mb-2'>
                   <div className='col'>
-                  <textarea class="form-control" rows="5" placeholder="Please write your comment"></textarea>
+                    <textarea class="form-control" rows="5" placeholder="Please write your comment"></textarea>
                   </div>
                 </div>
-                <div className='row'>
+                <div className='row mb-3'>
                   <div className='col'>
                     <input type='submit' className='btn btn-warning' value="Send Message"></input>
                   </div>
