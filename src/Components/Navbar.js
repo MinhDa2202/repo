@@ -1,33 +1,42 @@
 import React from 'react';
+import { Navbar, Nav, Container, Form, FormControl, Button } from 'react-bootstrap';
+import { FaShoppingCart } from 'react-icons/fa';
+import Badge from 'react-bootstrap/Badge';
 
-const Navbar = () => {
+const NavigationBar = ({ totalItemsInCart, handleShowCart }) => {
   return (
-    <nav className="navbar navbar-expand-lg navar-dark bg-dark">
-      <div className="container">
-        <a className="navbar-brand" href="#">Pizza House</a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <a className="nav-link active" href="#">Home</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">About us</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">Contact</a>
-            </li>
-          </ul>
-          <form className="d-flex" role="search">
-            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-            <button className="btn btn-danger" type="submit"><i className='fa fa-search'></i></button>
-          </form>
-        </div>
-      </div>
-    </nav>
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Container>
+        <Navbar.Brand href="#">Pizza House</Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarSupportedContent" />
+        <Navbar.Collapse id="navbarSupportedContent">
+          <Nav className="me-auto">
+            <Nav.Link href="#">Home</Nav.Link>
+            <Nav.Link href="#">About us</Nav.Link>
+            <Nav.Link href="#">Contact</Nav.Link>
+          </Nav>
+          <Form className="d-flex align-items-center">
+            <FormControl
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+            />
+            <Button variant="danger" type="submit">
+              <i className='fa fa-search'></i>
+            </Button>
+            {/* Nút Giỏ Hàng */}
+            <Button variant="outline-light" onClick={handleShowCart} className="ms-2 position-relative">
+              <FaShoppingCart />
+              <Badge bg="secondary" className="position-absolute top-0 start-100 translate-middle">
+                {totalItemsInCart}
+              </Badge>
+            </Button>
+          </Form>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default NavigationBar;
