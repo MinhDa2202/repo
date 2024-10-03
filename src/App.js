@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Container, Modal, Button, Badge } from 'react-bootstrap';
+import { Container, Modal, Button, Row, Col } from 'react-bootstrap';
 import { FaShoppingCart } from 'react-icons/fa';
 import NavigationBar from './Components/Navbar';
 import Carousel from './Components/Carousel';
-import MenuCard from './Components/MenuCard'; // Đảm bảo import component MenuCard
 import BookingForm from './Components/BookingForm';
 
 const App = () => {
@@ -44,17 +43,29 @@ const App = () => {
       <NavigationBar totalItemsInCart={totalItemsInCart} handleShowCart={handleShowCart} />
       <Carousel />
 
+      {/* Tiêu đề "Our Menu" */}
+      <h2 className="text-left mb-2 mt-2">Our Menu</h2>
+
       {/* Card Menu */}
-      <div className="row mt-3">
-        {[
+      <Row>
+        {[ // Danh sách các món ăn
           { id: 1, title: 'Pizza Category 1', price: '100.000đ', imgSrc: './Images/menu1.jpg' },
           { id: 2, title: 'Pizza Category 2', price: '100.000đ', imgSrc: './Images/menu2.jpg' },
           { id: 3, title: 'Pizza Category 3', price: '100.000đ', imgSrc: './Images/menu3.jpg' },
           { id: 4, title: 'Pizza Category 4', price: '100.000đ', imgSrc: './Images/menu4.jpg' },
         ].map(item => (
-          <MenuCard key={item.id} title={item.title} price={item.price} imgSrc={item.imgSrc} onAddToCart={() => addToCart(item)} />
+          <Col md={3} key={item.id}>
+            <div className="card mb-4">
+              <img src={item.imgSrc} className="card-img-top" alt={item.title} />
+              <div className="card-body">
+                <h5 className="card-title">{item.title}</h5>
+                <p className="card-text">{item.price}</p>
+                <Button variant="primary" onClick={() => addToCart(item)}> BUY </Button>
+              </div>
+            </div>
+          </Col>
         ))}
-      </div>
+      </Row>
 
       {/* Modal Giỏ Hàng */}
       <Modal show={showCart} onHide={handleCloseCart}>
@@ -83,7 +94,7 @@ const App = () => {
             Close
           </Button>
           <Button variant="primary" onClick={handleCloseCart}>
-          View cart
+            View cart
           </Button>
         </Modal.Footer>
       </Modal>
