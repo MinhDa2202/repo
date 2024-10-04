@@ -49,10 +49,10 @@ const App = () => {
       {/* Card Menu */}
       <Row>
         {[ // Danh sách các món ăn
-          { id: 1, title: 'Pizza Category 1', price: '100.000đ', imgSrc: './Images/menu1.jpg' },
-          { id: 2, title: 'Pizza Category 2', price: '100.000đ', imgSrc: './Images/menu2.jpg' },
-          { id: 3, title: 'Pizza Category 3', price: '100.000đ', imgSrc: './Images/menu3.jpg' },
-          { id: 4, title: 'Pizza Category 4', price: '100.000đ', imgSrc: './Images/menu4.jpg' },
+          { id: 1, title: 'Margherita Pizza', price: '100.000đ', imgSrc: './Images/menu1.jpg' },
+          { id: 2, title: 'Meat and Mushroom Pizza', price: '100.000đ', imgSrc: './Images/menu2.jpg' },
+          { id: 3, title: 'Seafood Pizza', price: '100.000đ', imgSrc: './Images/menu3.jpg' },
+          { id: 4, title: 'Napolitana Pizza', price: '100.000đ', imgSrc: './Images/menu4.jpg' },
         ].map(item => (
           <Col md={3} key={item.id}>
             <div className="card mb-4">
