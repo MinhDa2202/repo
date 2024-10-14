@@ -1,16 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Modal, Button, Row, Col } from 'react-bootstrap';
 import { FaShoppingCart } from 'react-icons/fa';
 import NavigationBar from './Components/Navbar';
 import Carousel from './Components/Carousel';
 import BookingForm from './Components/BookingForm';
+import Login from './Components/Login';
+import axios from 'axios';
 
 const App = () => {
-  const [cart, setCart] = useState([]); // State để lưu trữ sản phẩm trong giỏ
-  const [showCart, setShowCart] = useState(false); // State để điều khiển modal giỏ hàng
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [menuItems, setMenuItems] = useState([]); // Danh sách sản phẩm từ API
+  const [user, setUser] = useState(null); // Thông tin người dùng từ API
+
+  // Lấy danh sách sản phẩm từ API
+  useEffect(() => {
+    axios.get('https://api-demo-4gqb.onrender.com/products')
+      .then(response => {
+        setMenuItems(response.data.data || []);  // Đảm bảo dữ liệu trả về là mảng
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+        setMenuItems([]); // Nếu có lỗi, set menuItems là mảng rỗng
+      });
+
+    // Lấy thông tin người dùng từ API
+    axios.get('https://api-demo-4gqb.onrender.com/users')
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching user:', error);
+      });
+  }, []);
 
   const handleShowCart = () => setShowCart(true);
   const handleCloseCart = () => setShowCart(false);
+  const handleShowLogin = () => setShowLogin(true);
+  const handleCloseLogin = () => setShowLogin(false);
 
   const addToCart = (item) => {
     setCart((prevCart) => {
@@ -32,7 +60,7 @@ const App = () => {
         .map((cartItem) =>
           cartItem.id === id ? { ...cartItem, quantity } : cartItem
         )
-        .filter((cartItem) => cartItem.quantity > 0) // Xóa sản phẩm nếu số lượng bằng 0
+        .filter((cartItem) => cartItem.quantity > 0)
     );
   };
 
@@ -40,34 +68,40 @@ const App = () => {
 
   return (
     <Container>
-      <NavigationBar totalItemsInCart={totalItemsInCart} handleShowCart={handleShowCart} />
+      <NavigationBar
+        totalItemsInCart={totalItemsInCart}
+        handleShowCart={handleShowCart}
+        handleShowLogin={handleShowLogin}
+      />
+
+      <Login show={showLogin} handleClose={handleCloseLogin} />
+
       <Carousel />
 
-      {/* Tiêu đề "Our Menu" */}
       <h2 className="text-left mb-2 mt-2">Our Menu</h2>
 
-      {/* Card Menu */}
       <Row>
-        {[ // Danh sách các món ăn
-          { id: 1, title: 'Margherita Pizza', price: '100.000đ', imgSrc: './Images/menu1.jpg' },
-          { id: 2, title: 'Meat and Mushroom Pizza', price: '100.000đ', imgSrc: './Images/menu2.jpg' },
-          { id: 3, title: 'Seafood Pizza', price: '100.000đ', imgSrc: './Images/menu3.jpg' },
-          { id: 4, title: 'Napolitana Pizza', price: '100.000đ', imgSrc: './Images/menu4.jpg' },
-        ].map(item => (
-          <Col md={3} key={item.id}>
-            <div className="card mb-4">
-              <img src={item.imgSrc} className="card-img-top" alt={item.title} />
-              <div className="card-body">
-                <h5 className="card-title">{item.title}</h5>
-                <p className="card-text">{item.price}</p>
-                <Button variant="primary" onClick={() => addToCart(item)}> BUY </Button>
+        {menuItems.length > 0 ? (
+          menuItems.map(item => (
+            <Col md={3} key={item.id}>
+              <div className="card mb-4">
+                <img src={item.image} className="card-img-top" alt={item.title} />
+                <div className="card-body">
+                  <h5 className="card-title">{item.title}</h5>
+                  <p className="card-text">
+                    {item.salePrice ? `${item.salePrice} USD (Sale)` : `${item.price} USD`}
+                  </p>
+                  <Button variant="primary" onClick={() => addToCart(item)}> BUY </Button>
+                </div>
               </div>
-            </div>
-          </Col>
-        ))}
+            </Col>
+          ))
+        ) : (
+          <p>No menu items available</p>
+        )}
       </Row>
 
-      {/* Modal Giỏ Hàng */}
+
       <Modal show={showCart} onHide={handleCloseCart}>
         <Modal.Header closeButton>
           <Modal.Title><FaShoppingCart /> Shopping Cart</Modal.Title>
@@ -79,10 +113,10 @@ const App = () => {
             <ul>
               {cart.map((item) => (
                 <li key={item.id} className="d-flex justify-content-between align-items-center">
-                  <span>{item.title} - {item.price} x {item.quantity}</span>
+                  <span>{item.title} - {item.salePrice || item.price} USD x {item.quantity}</span>
                   <div>
-                    <Button variant="outline-secondary" onClick={() => updateItemQuantity(item.id, item.quantity - 1)}>-</Button>
-                    <Button variant="outline-secondary" onClick={() => updateItemQuantity(item.id, item.quantity + 1)}>+</Button>
+                    <Button variant="outline-secondary" style={{ marginRight: '5px' }} onClick={() => updateItemQuantity(item.id, item.quantity - 1)}>-</Button>
+                    <Button variant="outline-primary" onClick={() => updateItemQuantity(item.id, item.quantity + 1)}>+</Button>
                   </div>
                 </li>
               ))}
@@ -92,9 +126,6 @@ const App = () => {
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseCart}>
             Close
-          </Button>
-          <Button variant="primary" onClick={handleCloseCart}>
-            View cart
           </Button>
         </Modal.Footer>
       </Modal>

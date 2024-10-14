@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navbar, Nav, Container, Form, FormControl, Button } from 'react-bootstrap';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import Badge from 'react-bootstrap/Badge';
 
-const NavigationBar = ({ totalItemsInCart, handleShowCart }) => {
+const NavigationBar = ({ totalItemsInCart, handleShowCart, handleShowLogin }) => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
@@ -31,6 +31,10 @@ const NavigationBar = ({ totalItemsInCart, handleShowCart }) => {
               <Badge bg="secondary" className="position-absolute top-0 start-100 translate-middle">
                 {totalItemsInCart}
               </Badge>
+            </Button>
+            {/* Nút Đăng Nhập */}
+            <Button variant="outline-light" onClick={handleShowLogin} className="ms-2">
+              <FaUser /> {/* Icon Login */}
             </Button>
           </Form>
         </Navbar.Collapse>
