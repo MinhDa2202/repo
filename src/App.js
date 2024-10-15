@@ -11,25 +11,33 @@ const App = () => {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [menuItems, setMenuItems] = useState([]); // Danh sách sản phẩm từ API
-  const [user, setUser] = useState(null); // Thông tin người dùng từ API
+  const [menuItems, setMenuItems] = useState([]);
+  const [user, setUser] = useState(null);
 
-  // Lấy danh sách sản phẩm từ API
   useEffect(() => {
     axios.get('https://api-demo-4gqb.onrender.com/products')
       .then(response => {
-        setMenuItems(response.data.data || []);  // Đảm bảo dữ liệu trả về là mảng
+        setMenuItems(response.data.data || []);
       })
       .catch(error => {
         console.error('Error fetching products:', error);
-        setMenuItems([]); // Nếu có lỗi, set menuItems là mảng rỗng
+        setMenuItems([]);
       });
-  }, []); // Thêm [] để useEffect chỉ chạy một lần khi component được mount
+  }, []);
 
   const handleShowCart = () => setShowCart(true);
   const handleCloseCart = () => setShowCart(false);
   const handleShowLogin = () => setShowLogin(true);
   const handleCloseLogin = () => setShowLogin(false);
+
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    setShowLogin(false);
+  };
+
+  const handleLogout = () => {
+    setUser(null); // Xóa trạng thái đăng nhập
+  };
 
   const addToCart = (item) => {
     setCart((prevCart) => {
@@ -63,10 +71,15 @@ const App = () => {
         totalItemsInCart={totalItemsInCart}
         handleShowCart={handleShowCart}
         handleShowLogin={handleShowLogin}
+        user={user}
+        handleLogout={handleLogout}
       />
 
-      <Login show={showLogin} handleClose={handleCloseLogin} />
-
+      <Login
+        show={showLogin}
+        handleClose={handleCloseLogin}
+        handleLoginSuccess={handleLoginSuccess}
+      />
 
       <Carousel />
 
@@ -127,4 +140,3 @@ const App = () => {
 };
 
 export default App;
-
