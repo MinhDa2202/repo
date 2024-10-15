@@ -24,16 +24,7 @@ const App = () => {
         console.error('Error fetching products:', error);
         setMenuItems([]); // Nếu có lỗi, set menuItems là mảng rỗng
       });
-
-    // Lấy thông tin người dùng từ API
-    axios.get('https://api-demo-4gqb.onrender.com/users')
-      .then(response => {
-        setUser(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching user:', error);
-      });
-  }, []);
+  }, []); // Thêm [] để useEffect chỉ chạy một lần khi component được mount
 
   const handleShowCart = () => setShowCart(true);
   const handleCloseCart = () => setShowCart(false);
@@ -100,7 +91,6 @@ const App = () => {
           <p>No menu items available</p>
         )}
       </Row>
-
 
       <Modal show={showCart} onHide={handleCloseCart}>
         <Modal.Header closeButton>
